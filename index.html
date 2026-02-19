@@ -467,6 +467,7 @@
                 <div class="chat-input">
                     <input type="text" id="chatInput" placeholder="Share your thoughts or ask for advice...">
                     <button class="btn-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                    <button class="btn-send" onclick="clearMentorChat()" title="Clear chat" style="background:var(--bg-input);border:1px solid var(--border);color:var(--text-muted);font-size:12px;padding:11px 12px" onmouseover="this.style.color='#EF4444'" onmouseout="this.style.color='var(--text-muted)'"><i class="fas fa-trash-alt"></i></button>
                 </div>
             </div>
             <div class="mentor-tips">
@@ -630,11 +631,15 @@ document.querySelectorAll('.nav-item').forEach(item => {
 // ===================== CHATBOT (Claude AI) =====================
 function toggleChatbot() { document.getElementById('chatbotPanel').classList.toggle('open'); }
 
+// Chatbot conversation history for multi-turn context
+let chatbotHistory = [];
+
 async function sendChatbotMessage() {
     const input = document.getElementById('chatbotInput');
     const msg = input.value.trim();
     if (!msg) return;
     addChatbotMessage(msg, 'user');
+    chatbotHistory.push({ role: 'user', content: msg });
     input.value = '';
     const tid = 'cb-t-' + Date.now();
     const cont = document.getElementById('chatbotMessages');
@@ -642,21 +647,46 @@ async function sendChatbotMessage() {
     tdiv.className = 'chatbot-message bot'; tdiv.id = tid;
     tdiv.innerHTML = `<div class="message-avatar"><i class="fas fa-robot"></i></div><div class="message-content"><p style="color:var(--text-muted)"><i class="fas fa-circle-notch fa-spin"></i> Thinking...</p></div>`;
     cont.appendChild(tdiv); cont.scrollTop = cont.scrollHeight;
+
+    const CHATBOT_SYSTEM = `You are LakshyaSetu AI Assistant — a smart, friendly, and knowledgeable career guidance chatbot for Indian students and professionals. You are embedded in LakshyaSetu platform which offers: Career Matching, Skill Gap Analysis, Exam Pathways, Learning Roadmaps, Interview Prep, and Mentor Support.
+
+**Your Core Knowledge Areas:**
+- Indian competitive exams: JEE Main/Advanced, NEET, UPSC CSE, CAT, GATE, IBPS PO/Clerk, SBI PO, SSC CGL/CHSL, NDA, CDS, CLAT, CUET, XAT, SNAP, RBI Grade B, AFCAT, NEET PG
+- Career paths: Software Engineering, Data Science, AI/ML, Product Management, UX Design, Finance (CA, CFA, CPA), Banking, Civil Services (IAS/IPS/IFS), Healthcare, Law, Management Consulting, Digital Marketing, Entrepreneurship
+- Indian colleges: IITs, IIMs, NITs, BITS Pilani, AIIMS, NLUs, Top state universities, deemed universities
+- Skill development resources: Coursera, NPTEL, Unacademy, Physics Wallah, BYJU's, Scaler, upGrad, GeeksforGeeks, LeetCode, HackerRank
+- Indian job market: Salary ranges (in LPA), top MNCs and startups hiring, PSU jobs, government jobs, remote work opportunities
+- Study resources: Standard books for each exam, YouTube channels (Unacademy, Vedantu, Khan Academy, etc.)
+
+**Response Style:**
+- Be like a knowledgeable, friendly senior who gives real, specific advice — not vague platitudes
+- For quick questions: 2-4 sentences with the key answer
+- For detailed questions: structured response with **bold** key terms and bullet points
+- Always suggest the relevant LakshyaSetu feature (Career Match, Roadmap, Skill Gap, Interview Prep, Exam Pathways) when it can help
+- Include specific book names, website names, salary figures, timeline estimates where relevant
+- Be warm and encouraging, especially when someone seems anxious or uncertain`;
+
     try {
         const res = await fetch("https://api.anthropic.com/v1/messages", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000,
-                system: "You are LakshyaSetu AI Assistant, a career guidance chatbot for Indian students and professionals. Help with careers, skills, Indian exams (JEE, NEET, UPSC, CAT, GATE, IBPS), interview tips, and emotional support. Be concise, warm, practical. 2-4 sentences max unless detailed help requested.",
-                messages: [{ role: "user", content: msg }]
+            body: JSON.stringify({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 1500,
+                system: CHATBOT_SYSTEM,
+                messages: chatbotHistory.slice(-10)
             })
         });
         const data = await res.json();
         document.getElementById(tid)?.remove();
-        addChatbotMessage(data.content?.[0]?.text || getBotReply(msg), 'bot');
+        const reply = data.content?.[0]?.text || getBotReply(msg);
+        chatbotHistory.push({ role: 'assistant', content: reply });
+        addChatbotMessage(renderMarkdown(reply), 'bot');
     } catch(e) {
         document.getElementById(tid)?.remove();
-        addChatbotMessage(getBotReply(msg), 'bot');
+        const fallback = getBotReply(msg);
+        chatbotHistory.push({ role: 'assistant', content: fallback });
+        addChatbotMessage(fallback, 'bot');
     }
 }
 
@@ -668,7 +698,7 @@ function addChatbotMessage(text, type) {
     const div = document.createElement('div');
     div.className = `chatbot-message ${type}`;
     div.innerHTML = type === 'bot'
-        ? `<div class="message-avatar"><i class="fas fa-robot"></i></div><div class="message-content"><p>${text}</p></div>`
+        ? `<div class="message-avatar"><i class="fas fa-robot"></i></div><div class="message-content" style="line-height:1.7">${text}</div>`
         : `<div class="message-content"><p>${text}</p></div>`;
     cont.appendChild(div); cont.scrollTop = cont.scrollHeight;
 }
@@ -677,57 +707,158 @@ function addChatbotMessage(text, type) {
 function selectEmotion(btn) {
     document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    selectedEmotion = btn.dataset.emotion;
     const responses = {
-        confused: "It's completely okay to feel confused. Career paths aren't always clear. Let's break it down step by step — what area feels most uncertain for you?",
-        stressed: "I hear you. Stress is tough, especially when your future feels uncertain. Take a deep breath. Let's tackle one thing at a time — what's causing the most stress right now?",
-        demotivated: "Feeling demotivated happens to everyone. Remember: even the smallest step forward is progress. What goal were you working toward?",
-        overwhelmed: "When everything feels like too much, the best move is to pause and simplify. Let's identify just one thing you can do today.",
-        anxious: "Anxiety often comes from uncertainty about outcomes. Let's focus on what you can control. What's worrying you most right now?",
-        confident: "That's amazing! Confidence is your biggest asset. Let's channel that energy into a concrete action plan. What's your next big goal?"
+        confused: "I hear you — feeling confused about your career path is actually more common than you think, and it's a sign you care about making the right choice. 🙏\n\nLet's untangle this together. Career confusion usually comes from one of a few places: too many options, not knowing your own strengths well enough, or pressure from family/society to pick a 'safe' path.\n\n**Tell me more** — what specifically feels confusing right now? Is it:\n- Choosing between different career fields?\n- Not knowing if you're good enough for your dream career?\n- Feeling like everyone else has a plan except you?\n\nThere are no wrong answers here. Let's figure this out step by step. 💛",
+        stressed: "I can feel the weight in what you're sharing, and I want you to know — it's okay to feel this way. Stress about your career and future is real and valid. You're not alone in this. 💙\n\nBefore we dive into solutions, take one slow deep breath with me. 🌬️\n\nNow, let's identify what's creating the most stress. Is it:\n- **Exam pressure** (upcoming competitive exams)?\n- **Placement anxiety** (job hunt not going well)?\n- **Family expectations** pulling you in one direction?\n- **Feeling behind** compared to peers?\n\nSharing the specific source of stress will help me give you targeted support. Whatever it is, we'll work through it together. You've got this. 💪",
+        demotivated: "I'm really glad you're here and talking about this — that itself takes courage when you're feeling low. 💛\n\nDemotivation is your mind's way of saying *'I need a reset, not a quit.'* There's a big difference between the two.\n\nTell me — **what were you working toward when the motivation started fading?** Was it:\n- Preparing for a competitive exam?\n- Building skills for a career switch?\n- Job hunting with no results yet?\n- Something else entirely?\n\nSometimes demotivation is also a signal that we need to **adjust the goal**, not abandon it. Let's explore this together. 🌱",
+        overwhelmed: "When everything feels like too much at once, the first thing I want you to do is stop trying to solve everything simultaneously. That's not how the mind works best. 🧠\n\nYou are not behind. You are not failing. You are a human being dealing with a genuinely complex situation.\n\n**Let's do one thing right now** — tell me the **one thing** that feels most overwhelming. Not everything — just the biggest, heaviest thing sitting on your chest right now.\n\nOnce we name it clearly, it immediately becomes more manageable. I promise. 💛",
+        anxious: "Anxiety about your career future is something almost every ambitious student and professional experiences — and feeling it means you care deeply. That's actually a strength.\n\n💡 Here's something helpful to remember: anxiety usually comes from focusing on outcomes we can't fully control. What we *can* control is our **daily actions and preparation**.\n\nLet's redirect that anxious energy into something productive. Tell me:\n- What outcome are you most anxious about? (Exam result? Job offer? Career choice?)\n- What have you already been doing to prepare?\n\nThere's almost always more you can do — and knowing that can transform anxiety into focused action. Let's find your next step together. 🎯",
+        confident: "That energy is EVERYTHING — hold onto it! 🔥 Confidence is your biggest career asset, and this is exactly the right moment to convert it into momentum.\n\nLet's make sure this confidence translates into **concrete progress**. The best way to do that:\n\n1. **Define your next milestone** clearly — what does success look like in the next 30-60 days?\n2. **Reverse-engineer it** — what daily actions will get you there?\n3. **Remove one obstacle** that's been slowing you down\n\nTell me — **what's the big goal you're feeling confident about right now?** Let's build a real action plan around it and make it unstoppable! 🚀"
     };
-    addMentorMessage(responses[btn.dataset.emotion] || "Tell me more about how you're feeling.", 'bot');
+    const reply = responses[btn.dataset.emotion] || "Tell me more about how you're feeling — I'm here to listen and help. 💛";
+    mentorHistory.push({ role: 'assistant', content: reply });
+    addMentorMessage(renderMarkdown(reply), 'bot');
 }
+
+// Mentor conversation history for multi-turn memory
+let mentorHistory = [];
+let selectedEmotion = null;
 
 async function sendMessage() {
     const input = document.getElementById('chatInput');
     const msg = input.value.trim();
     if (!msg) return;
     addMentorMessage(msg, 'user');
+    mentorHistory.push({ role: 'user', content: msg });
     input.value = '';
+
     const tid = 'mt-t-' + Date.now();
     const cont = document.getElementById('chatMessages');
     const tdiv = document.createElement('div');
     tdiv.className = 'message bot-message'; tdiv.id = tid;
-    tdiv.innerHTML = `<div class="message-icon"><i class="fas fa-robot"></i></div><div class="message-content" style="color:var(--text-muted)"><i class="fas fa-circle-notch fa-spin"></i> Thinking...</div>`;
+    tdiv.innerHTML = `<div class="message-icon"><i class="fas fa-robot"></i></div><div class="message-content" style="color:var(--text-muted)"><i class="fas fa-circle-notch fa-spin"></i> Mentor is thinking...</div>`;
     cont.appendChild(tdiv); cont.scrollTop = cont.scrollHeight;
+
+    const emotionContext = selectedEmotion ? `The student has indicated they are currently feeling: ${selectedEmotion}. Keep this in mind when responding.` : '';
+
+    const MENTOR_SYSTEM = `You are an expert AI Career Mentor on LakshyaSetu, a career guidance platform built for Indian students and young professionals. You have deep knowledge across:
+
+**Career Domains:**
+- Technology: Software Engineering, Data Science, AI/ML, Product Management, UX Design, DevOps, Cybersecurity
+- Government & Civil Services: UPSC (IAS/IPS/IFS), SSC CGL, State PSCs, Defence (NDA/CDS)
+- Finance & Business: CA, CFA, MBA, Banking (IBPS/SBI PO), Business Analysis
+- Engineering & Core: GATE, PSU jobs, Core engineering roles
+- Healthcare: NEET, MBBS, Medical specializations
+- Law: CLAT, LLB, Legal careers
+- Management & Consulting: CAT, MBA from IIMs, Consulting careers
+- Creative & Design: UX, Graphic Design, Architecture
+- Entrepreneurship: Startups, funding, business models in India
+
+**Indian Education & Exam Ecosystem:**
+- Board exams: CBSE, ICSE, State boards
+- Engineering: JEE Main, JEE Advanced, BITSAT, VITEEE, state CETs
+- Medical: NEET UG, NEET PG, AIIMS
+- Management: CAT, XAT, SNAP, MAT, CMAT
+- Government: UPSC CSE (Prelims/Mains/Interview), UPSC CAPF, SSC, Railways, Banking (IBPS PO/Clerk, SBI PO, RBI Grade B)
+- Defence: NDA, CDS, AFCAT
+- Law: CLAT, AILET
+- Research: UGC NET, JEST, TIFR GS
+- International: GRE, GMAT, IELTS, TOEFL for abroad studies
+
+**Your Mentoring Approach:**
+1. **Listen First**: Always acknowledge the student's feelings and situation before giving advice
+2. **Be Specific**: Give concrete, actionable steps — not vague platitudes. Include real exam names, book names, websites, timelines, salary ranges where relevant
+3. **India-First**: Reference Indian colleges (IITs, IIMs, NITs, BITS, Delhi University, etc.), Indian job markets, Indian salary ranges (in LPA), Indian scholarship programs
+4. **Emotional Intelligence**: If a student seems stressed, overwhelmed, or lost — validate first, then guide. Never dismiss emotions
+5. **Structured Responses**: For complex questions, use clear structure with headers or numbered steps. For emotional support, keep it conversational and warm
+6. **Follow-Up**: End responses with a relevant follow-up question to continue the conversation meaningfully
+7. **Realistic Expectations**: Be honest about difficulty levels and timelines while staying encouraging
+8. **Resource Recommendations**: Suggest specific YouTube channels, books, websites, apps, coaching institutes where helpful (e.g., Khan Academy, Unacademy, BYJU's, PW, Vajiram & Ravi, Made Easy, etc.)
+
+**Response Style:**
+- For career/study questions: Give detailed, structured advice (150-400 words) with clear steps
+- For emotional support: Be warm, empathetic, validating (100-200 words), then practical
+- For quick factual questions: Concise but complete
+- Use **bold** for key terms, bullet points for lists of steps/options
+- Always sign off with either a follow-up question OR an encouraging closing line
+
+${emotionContext}
+
+Remember: Many of these students may be first-generation college graduates, from tier-2/3 cities, navigating career decisions without strong family guidance. Be their wise, knowledgeable, caring mentor.`;
+
     try {
         const res = await fetch("https://api.anthropic.com/v1/messages", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000,
-                system: "You are an empathetic AI Career Mentor for Indian students and young professionals on LakshyaSetu platform. Provide emotional support, career guidance, motivation, and practical advice. Be warm, encouraging, understanding. Keep responses 3-5 sentences unless more is needed. Focus on building confidence and giving actionable next steps.",
-                messages: [{ role: "user", content: msg }]
+            body: JSON.stringify({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 2000,
+                system: MENTOR_SYSTEM,
+                messages: mentorHistory.slice(-12) // keep last 12 turns for context
             })
         });
         const data = await res.json();
         document.getElementById(tid)?.remove();
-        addMentorMessage(data.content?.[0]?.text || getBotReply(msg), 'bot');
+        const reply = data.content?.[0]?.text || getBotReply(msg);
+        mentorHistory.push({ role: 'assistant', content: reply });
+        addMentorMessage(renderMarkdown(reply), 'bot');
     } catch(e) {
         document.getElementById(tid)?.remove();
-        addMentorMessage(getBotReply(msg), 'bot');
+        const fallback = getBotReply(msg);
+        mentorHistory.push({ role: 'assistant', content: fallback });
+        addMentorMessage(fallback, 'bot');
     }
 }
 
 document.getElementById('chatInput')?.addEventListener('keypress', e => { if (e.key==='Enter') sendMessage(); });
 
+// Render basic markdown to HTML so Claude's responses display properly
+function renderMarkdown(text) {
+    return text
+        // Bold: **text** or __text__
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/__(.*?)__/g, '<strong>$1</strong>')
+        // Italic: *text* or _text_
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        // Numbered lists: lines starting with "1. " etc
+        .replace(/^(\d+)\.\s+(.+)$/gm, '<div style="display:flex;gap:8px;margin:4px 0"><span style="color:var(--primary);font-weight:700;flex-shrink:0">$1.</span><span>$2</span></div>')
+        // Bullet lists: lines starting with "- " or "• "
+        .replace(/^[-•]\s+(.+)$/gm, '<div style="display:flex;gap:8px;margin:4px 0;padding-left:4px"><span style="color:var(--primary);flex-shrink:0">▸</span><span>$1</span></div>')
+        // Headers: ### text
+        .replace(/^###\s+(.+)$/gm, '<div style="font-family:Sora,sans-serif;font-size:14px;font-weight:700;color:var(--primary);margin:12px 0 6px">$1</div>')
+        .replace(/^##\s+(.+)$/gm, '<div style="font-family:Sora,sans-serif;font-size:15px;font-weight:700;color:var(--primary);margin:14px 0 6px">$1</div>')
+        .replace(/^#\s+(.+)$/gm, '<div style="font-family:Sora,sans-serif;font-size:16px;font-weight:700;color:var(--text-primary);margin:14px 0 8px">$1</div>')
+        // Inline code
+        .replace(/`([^`]+)`/g, '<code style="background:var(--bg-input);padding:2px 6px;border-radius:4px;font-size:12px;font-family:monospace">$1</code>')
+        // Line breaks
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>')
+        // Links: [text](url)
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" style="color:var(--primary);text-decoration:underline">$1</a>');
+}
+
 function addMentorMessage(text, type) {
     const cont = document.getElementById('chatMessages');
     const div = document.createElement('div');
     div.className = `message ${type==='bot'?'bot-message':'user-message'}`;
-    div.innerHTML = type==='bot'
-        ? `<div class="message-icon"><i class="fas fa-robot"></i></div><div class="message-content">${text}</div>`
-        : `<div class="message-content">${text}</div>`;
+    if (type === 'bot') {
+        div.innerHTML = `<div class="message-icon"><i class="fas fa-robot"></i></div><div class="message-content" style="line-height:1.7">${text}</div>`;
+    } else {
+        div.innerHTML = `<div class="message-content">${text}</div>`;
+    }
     cont.appendChild(div); cont.scrollTop = cont.scrollHeight;
+}
+
+function clearMentorChat() {
+    mentorHistory = [];
+    selectedEmotion = null;
+    document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('chatMessages').innerHTML = `
+        <div class="message bot-message">
+            <div class="message-icon"><i class="fas fa-robot"></i></div>
+            <div class="message-content" style="line-height:1.7">Chat cleared! I'm your AI Career Mentor. How can I support you today? Select a mood above or just type your question. 💛</div>
+        </div>`;
 }
 
 function getBotReply(msg) {
