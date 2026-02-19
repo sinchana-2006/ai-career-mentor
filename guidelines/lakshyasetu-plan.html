@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LakshyaSetu AI — Master Plan</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --accent: #f59e0b;
+    --bg: #09090b;
+    --surface: #111113;
+    --surface2: #18181b;
+    --border: rgba(255,255,255,0.07);
+    --text: #f4f4f5;
+    --muted: #71717a;
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #3b82f6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2.5rem 2rem;
+    background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(245,158,11,0.08));
+    border-radius: 24px;
+    border: 1px solid rgba(99,102,241,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(99,102,241,0.2), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
+    padding: 4px 12px; border-radius: 99px; font-size: 12px; color: var(--primary-light);
+    margin-bottom: 1rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; }
+  .hero h1 span { color: var(--primary-light); }
+  .hero p { color: var(--muted); margin-top: 0.5rem; font-size: 0.95rem; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 640px) { .grid-3 { grid-template-columns: 1fr; } }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  .card-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .card-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .card h2 { font-size: 1rem; font-weight: 700; }
+  .card p.sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+  /* Checklist */
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.85rem; cursor: pointer; user-select: none;
+  }
+  .checklist li .check {
+    width: 18px; height: 18px; border-radius: 5px;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px; transition: all 0.2s;
+  }
+  .checklist li.done .check {
+    background: var(--green); border-color: var(--green);
+  }
+  .checklist li.done .check::after { content: '✓'; font-size: 11px; color: white; }
+  .checklist li.done .item-text { color: var(--muted); text-decoration: line-through; }
+  .checklist li .item-text { line-height: 1.4; }
+  .checklist li .tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.68rem; padding: 1px 6px; border-radius: 4px; margin-top: 1px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .tag-free { background: rgba(34,197,94,0.15); color: var(--green); }
+  .tag-key  { background: rgba(245,158,11,0.15); color: var(--accent); }
+  .tag-warn { background: rgba(239,68,68,0.15); color: var(--red); }
+
+  /* Languages grid */
+  .lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+  .lang-chip {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 8px 10px; text-align: center;
+    font-size: 0.78rem;
+  }
+  .lang-chip .flag { font-size: 1.2rem; display: block; margin-bottom: 3px; }
+  .lang-chip .name { color: var(--muted); }
+
+  /* Stack pills */
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.5rem; }
+  .pill {
+    padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 600;
+    border: 1px solid;
+  }
+  .pill-purple { color: var(--primary-light); border-color: rgba(129,140,248,0.3); background: rgba(99,102,241,0.1); }
+  .pill-amber  { color: var(--accent);       border-color: rgba(245,158,11,0.3);  background: rgba(245,158,11,0.1); }
+  .pill-green  { color: var(--green);        border-color: rgba(34,197,94,0.3);   background: rgba(34,197,94,0.1); }
+  .pill-blue   { color: #60a5fa;             border-color: rgba(59,130,246,0.3);  background: rgba(59,130,246,0.1); }
+
+  /* Alert box */
+  .alert {
+    padding: 1rem 1.25rem; border-radius: 12px; font-size: 0.83rem; line-height: 1.6;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .alert-amber { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: #fbbf24; }
+  .alert-green { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.25);  color: #4ade80; }
+  .alert-blue  { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); color: #93c5fd; }
+
+  .code-block {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.75rem;
+    color: #a78bfa; overflow-x: auto; white-space: pre;
+  }
+
+  /* Progress bar */
+  .progress-bar { background: var(--surface2); border-radius: 99px; height: 6px; margin-top: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+
+  /* Timeline */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .timeline-item { display: flex; gap: 14px; position: relative; }
+  .timeline-item:not(:last-child)::before {
+    content: ''; position: absolute; left: 11px; top: 24px;
+    width: 2px; height: calc(100% - 4px); background: var(--border);
+  }
+  .timeline-dot {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;
+    margin-top: 2px; z-index: 1;
+  }
+  .timeline-content { padding-bottom: 1.25rem; }
+  .timeline-content h3 { font-size: 0.88rem; font-weight: 700; }
+  .timeline-content p  { font-size: 0.78rem; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+
+  /* Full-width card */
+  .full { grid-column: 1 / -1; }
+
+  /* Section title */
+  .section-label {
+    font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.75rem;
+  }
+
+  h2.big { font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem; }
+
+  /* Progress counter */
+  .counter { font-size: 2rem; font-weight: 800; color: var(--primary-light); }
+  .counter span { font-size: 1rem; color: var(--muted); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">⚡ LakshyaSetu AI</div>
+    <h1>Your <span>Master Plan</span></h1>
+    <p>UI/UX · Languages · Audio · Deployment · Mobile — all in one place</p>
+  </div>
+
+  <!-- Row 1: Model status + API keys -->
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(34,197,94,0.15)">🤖</div>
+        <div><h2>Model Status</h2><p class="sub">Do you have a trained model?</p></div>
+      </div>
+      <div class="alert alert-green" style="margin-bottom:1rem">
+        ✅ <span><strong>No trained model needed.</strong> Your app uses prompt engineering via an LLM API — which is the industry standard. Zero training required.</span>
+      </div>
+      <div class="section-label">What your backend actually does</div>
+      <ul class="checklist">
+        <li><div class="check"></div><div class="item-text">roadmap_service.py → pure data logic (SQLAlchemy)</div></li>
+        <li><div class="check"></div><div class="item-text">AIChat.tsx → was using hardcoded if/else responses</div></li>
+        <li><div class="check"></div><div class="item-text">Now upgraded to real Gemini 1.5 Flash API calls ✓</div></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(245,158,11,0.15)">🔑</div>
+        <div><h2>API Keys to Generate</h2><p class="sub">Before you deploy</p></div>
+      </div>
+      <ul class="checklist">
+        <li>
+          <div class="check"></div>
+          <div class="item-text"><strong>Gemini API Key</strong> — aistudio.google.com (free)</div>
+          <span class="tag tag-free">FREE</span>
+        </li>
+        <li>
+          <div class="check"></div>
+          <div class="item-text"><strong>Google Translate API</strong> — for language switching</div>
+          <span class="tag tag-key">OPTIONAL</span>
+        </li>
+        <li>
+          <div class="check"></div>
+          <div class="item-text"><strong>Web Speech API</strong> — TTS audio, built into browser</div>
+          <span class="tag tag-free">FREE</span>
+        </li>
+        <li>
+          <div class="check"></div>
+          <div class="item-text">Add keys to <code style="font-family:monospace;font-size:0.8rem">.env</code> file, never hardcode</div>
+          <span class="tag tag-warn">CRITICAL</span>
+        </li>
+      </ul>
+      <div class="code-block">VITE_GEMINI_API_KEY=your_key_here</div>
+    </div>
+  </div>
+
+  <!-- Row 2: New features -->
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(99,102,241,0.15)">🌐</div>
+        <div><h2>Languages Added</h2><p class="sub">11 languages in the new AIChat.tsx</p></div>
+      </div>
+      <div class="lang-grid">
+        <div class="lang-chip"><span class="flag">🇬🇧</span><span class="name">English</span></div>
+        <div class="lang-chip"><span class="flag">🇮🇳</span><span class="name">हिंदी</span></div>
+        <div class="lang-chip"><span class="flag">🇮🇳</span><span class="name">ಕನ್ನಡ</span></div>
+        <div class="lang-chip"><span class="flag">🇮🇳</span><span class="name">தமிழ்</span></div>
+        <div class="lang-chip"><span class="flag">🇮🇳</span><span class="name">తెలుగు</span></div>
+        <div class="lang-chip"><span class="flag">🇮🇳</span><span class="name">বাংলা</span></div>
+        <div class="lang-chip"><span class="flag">🇮🇳</span><span class="name">मराठी</span></div>
+        <div class="lang-chip"><span class="flag">🇮🇳</span><span class="name">ગુજરાતી</span></div>
+        <div class="lang-chip"><span class="flag">🇫🇷</span><span class="name">Français</span></div>
+        <div class="lang-chip"><span class="flag">🇪🇸</span><span class="name">Español</span></div>
+        <div class="lang-chip"><span class="flag">🇩🇪</span><span class="name">Deutsch</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(59,130,246,0.15)">🔊</div>
+        <div><h2>Audio / TTS</h2><p class="sub">Read aloud every AI response</p></div>
+      </div>
+      <div class="alert alert-blue" style="margin-bottom:1rem">
+        🎙️ Uses the <strong>Web Speech API</strong> — 100% free, no key needed, works in Chrome, Edge, Safari.
+      </div>
+      <ul class="checklist">
+        <li><div class="check"></div><div class="item-text">🔊 Speaker icon on every AI message</div></li>
+        <li><div class="check"></div><div class="item-text">Auto-uses the selected language's voice (e.g. hi-IN)</div></li>
+        <li><div class="check"></div><div class="item-text">Tap again to stop mid-speech</div></li>
+        <li><div class="check"></div><div class="item-text">Gracefully disabled if browser doesn't support TTS</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Deployment checklist (full width) -->
+  <div class="card" style="margin-bottom:1.25rem">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(245,158,11,0.15)">🚀</div>
+      <div><h2>Deployment Checklist</h2><p class="sub">Tick these off before you go live — click to check!</p></div>
+    </div>
+    <div class="grid grid-3" style="margin-bottom:0">
+      <div>
+        <div class="section-label">Frontend (Vite)</div>
+        <ul class="checklist" id="deploy-fe">
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Run <code>npm run build</code> — zero errors</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Add VITE_GEMINI_API_KEY to .env</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">.env is in .gitignore ✓</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Deploy to Vercel (free, best for Vite)</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Set env vars in Vercel dashboard</div></li>
+        </ul>
+      </div>
+      <div>
+        <div class="section-label">Backend (Python)</div>
+        <ul class="checklist" id="deploy-be">
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Add requirements.txt</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Set CORS headers for your frontend domain</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Add .env / secrets to Railway or Render</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Deploy backend to Railway (free tier)</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Test all API endpoints are reachable</div></li>
+        </ul>
+      </div>
+      <div>
+        <div class="section-label">Security</div>
+        <ul class="checklist" id="deploy-sec">
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">No API keys in source code</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">HTTPS enforced (Vercel does this auto)</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Rate-limit Gemini calls on backend</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Input sanitisation on chat messages</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Check Gemini free-tier quota limits</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile plan -->
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(34,197,94,0.15)">📱</div>
+        <div><h2>Mobile App (2-hour plan)</h2><p class="sub">Fastest path from React → native</p></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(99,102,241,0.3);color:var(--primary-light)">1</div>
+          <div class="timeline-content">
+            <h3>Install Capacitor <span style="color:var(--muted);font-weight:400">~10 min</span></h3>
+            <div class="code-block">npm i @capacitor/core @capacitor/cli
+npx cap init LakshyaSetu com.lakshyasetu.app
+npx cap add android</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(245,158,11,0.3);color:var(--accent)">2</div>
+          <div class="timeline-content">
+            <h3>Build & Sync <span style="color:var(--muted);font-weight:400">~5 min</span></h3>
+            <div class="code-block">npm run build
+npx cap sync</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:rgba(34,197,94,0.3);color:var(--green)">3</div>
+          <div class="timeline-content">
+            <h3>Open in Android Studio <span style="color:var(--muted);font-weight:400">~90 min</span></h3>
+            <div class="code-block">npx cap open android</div>
+            <p>Run on emulator or real device. Zero React code changes needed.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(129,140,248,0.15)">🎨</div>
+        <div><h2>Colour System</h2><p class="sub">Updated theme for LakshyaSetu</p></div>
+      </div>
+      <div class="section-label">Recommended palette</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:10px;font-size:0.82rem">
+          <div style="width:32px;height:32px;border-radius:8px;background:#6366f1;flex-shrink:0"></div>
+          <div><strong>Primary</strong> <span style="color:var(--muted)">#6366f1 — Indigo (trust, tech)</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:0.82rem">
+          <div style="width:32px;height:32px;border-radius:8px;background:#f59e0b;flex-shrink:0"></div>
+          <div><strong>Accent</strong> <span style="color:var(--muted)">#f59e0b — Amber (ambition)</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:0.82rem">
+          <div style="width:32px;height:32px;border-radius:8px;background:#0f172a;border:1px solid rgba(255,255,255,0.1);flex-shrink:0"></div>
+          <div><strong>Background</strong> <span style="color:var(--muted)">#0f172a — Deep navy</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:0.82rem">
+          <div style="width:32px;height:32px;border-radius:8px;background:#22c55e;flex-shrink:0"></div>
+          <div><strong>Success</strong> <span style="color:var(--muted)">#22c55e — Progress/done</span></div>
+        </div>
+      </div>
+      <div class="alert alert-amber">
+        💡 To apply globally, update <code style="font-family:monospace">--primary</code> in your Tailwind CSS variables file. All components inherit automatically.
+      </div>
+    </div>
+  </div>
+
+  <!-- What was changed in AIChat -->
+  <div class="card" style="margin-bottom: 2rem">
+    <div class="card-header">
+      <div class="card-icon" style="background:rgba(99,102,241,0.15)">📝</div>
+      <div><h2>What Changed in AIChat.tsx</h2><p class="sub">New file is ready to download above</p></div>
+    </div>
+    <div class="grid grid-3" style="margin-bottom:0">
+      <div>
+        <div class="section-label">Removed</div>
+        <ul class="checklist">
+          <li><div class="check done"></div><div class="item-text done" style="color:var(--muted);text-decoration:line-through">Hardcoded getAIResponse() if/else</div></li>
+          <li><div class="check done"></div><div class="item-text done" style="color:var(--muted);text-decoration:line-through">setTimeout fake delay</div></li>
+        </ul>
+      </div>
+      <div>
+        <div class="section-label">Added</div>
+        <ul class="checklist">
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Real Gemini 1.5 Flash API call</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Language dropdown (11 languages)</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Google Translate on AI responses</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">🔊 TTS button per message</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Loading states + error handling</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">AnimatePresence for smoother UX</div></li>
+        </ul>
+      </div>
+      <div>
+        <div class="section-label">Improved UI</div>
+        <ul class="checklist">
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Rounded-2xl bubbles with tails</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Gradient avatar for AI</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Compact meta row (time + audio)</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Responsive mobile layout</div></li>
+          <li onclick="toggle(this)"><div class="check"></div><div class="item-text">Spinning loader on Send button</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggle(el) {
+  el.classList.toggle('done');
+}
+</script>
+</body>
+</html>
