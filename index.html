@@ -1,0 +1,2318 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-color="navy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LakshyaSetu AI - Career Intelligence Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===================== CSS VARIABLES ===================== */
+        :root {
+            /* Navy + Amber Combo (default) */
+            --primary: #F59E0B;
+            --primary-dark: #D97706;
+            --primary-light: #FCD34D;
+            --secondary: #1E3A5F;
+            --secondary-dark: #0F1F33;
+            --accent: #38BDF8;
+
+            /* Dark mode surfaces */
+            --bg-base: #0A0F1E;
+            --bg-surface: #111827;
+            --bg-card: #1A2235;
+            --bg-input: #1E293B;
+            --bg-hover: #243049;
+            --border: rgba(255,255,255,0.08);
+            --border-focus: #F59E0B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --shadow: 0 4px 30px rgba(0,0,0,0.4);
+            --shadow-card: 0 8px 40px rgba(0,0,0,0.5);
+            --glow: 0 0 30px rgba(245,158,11,0.2);
+            --sidebar-bg: #0D1526;
+        }
+
+        [data-theme="light"] {
+            --bg-base: #F0F4FF;
+            --bg-surface: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-input: #F8FAFF;
+            --bg-hover: #EEF2FF;
+            --border: rgba(0,0,0,0.08);
+            --border-focus: #F59E0B;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-card: 0 8px 30px rgba(0,0,0,0.12);
+            --glow: 0 0 30px rgba(245,158,11,0.15);
+            --sidebar-bg: #1E3A5F;
+        }
+
+        [data-color="green"] {
+            --primary: #FBBF24;
+            --primary-dark: #F59E0B;
+            --primary-light: #FDE68A;
+            --secondary: #065F46;
+            --secondary-dark: #022C22;
+            --accent: #34D399;
+            --sidebar-bg: #022C22;
+        }
+
+        [data-color="green"][data-theme="light"] {
+            --sidebar-bg: #065F46;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ===================== LOGIN PAGE ===================== */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Left Panel - Branding */
+        .login-left {
+            width: 50%;
+            background: linear-gradient(135deg, var(--secondary-dark) 0%, var(--secondary) 60%, #1a4a7a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-color="green"] .login-left {
+            background: linear-gradient(135deg, #022C22 0%, #065F46 60%, #047857 100%);
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+            top: -100px; right: -100px;
+            border-radius: 50%;
+        }
+        .login-left::after {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(56,189,248,0.1) 0%, transparent 70%);
+            bottom: -80px; left: -80px;
+            border-radius: 50%;
+        }
+
+        .left-content { position: relative; z-index: 1; text-align: center; max-width: 420px; }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 40px;
+        }
+
+        .brand-icon {
+            width: 54px; height: 54px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(245,158,11,0.4);
+        }
+
+        .brand-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .brand-name span { color: var(--primary); }
+
+        .left-content h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .left-content p {
+            color: rgba(255,255,255,0.65);
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .left-features {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .left-feature {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 14px 18px;
+            text-align: left;
+            backdrop-filter: blur(10px);
+        }
+
+        .left-feature-icon {
+            width: 40px; height: 40px;
+            background: rgba(245,158,11,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .left-feature-text strong {
+            display: block;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .left-feature-text span {
+            color: rgba(255,255,255,0.55);
+            font-size: 12px;
+        }
+
+        .left-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 36px;
+            justify-content: center;
+        }
+
+        .left-stat { text-align: center; }
+        .left-stat-num {
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .left-stat-label {
+            color: rgba(255,255,255,0.55);
+            font-size: 12px;
+        }
+
+        /* Right Panel - Form */
+        .login-right {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 50px;
+            background: var(--bg-surface);
+            position: relative;
+        }
+
+        .login-form-box {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .form-header { margin-bottom: 32px; }
+
+        .form-header h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-header p { color: var(--text-secondary); font-size: 14px; }
+
+        /* Tabs */
+        .auth-tabs {
+            display: flex;
+            background: var(--bg-input);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 28px;
+            border: 1px solid var(--border);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .auth-tab.active {
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 12px rgba(245,158,11,0.4);
+        }
+
+        /* Social Buttons */
+        .social-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .social-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: var(--glow);
+        }
+
+        .social-btn img { width: 18px; height: 18px; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* Form Fields */
+        .field-group {
+            margin-bottom: 16px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 7px;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .field-wrap input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .field-wrap input:focus {
+            border-color: var(--primary);
+            background: var(--bg-hover);
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.12);
+        }
+
+        .field-wrap input:focus + i, .field-wrap:focus-within i { color: var(--primary); }
+
+        .field-wrap .eye-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            pointer-events: all;
+            transition: color 0.2s;
+        }
+        .field-wrap .eye-toggle:hover { color: var(--primary); }
+
+        .field-row { display: flex; gap: 12px; }
+        .field-row .field-group { flex: 1; }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 16px; height: 16px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .forgot-link:hover { text-decoration: underline; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Sora', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 20px rgba(245,158,11,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(245,158,11,0.5);
+        }
+
+        .btn-submit:active { transform: translateY(0); }
+
+        .switch-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .switch-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .switch-text a:hover { text-decoration: underline; }
+
+        .terms-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+
+        .terms-text a { color: var(--primary); text-decoration: none; }
+
+        /* Password strength */
+        .strength-bar {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .strength-segment {
+            height: 3px;
+            flex: 1;
+            background: var(--border);
+            border-radius: 2px;
+            transition: background 0.3s;
+        }
+
+        .strength-label {
+            font-size: 11px;
+            margin-top: 4px;
+            color: var(--text-muted);
+        }
+
+        /* Theme & Color controls at top right */
+        .login-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .ctrl-btn {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ctrl-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .ctrl-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* ===================== APP CONTAINER ===================== */
+        .app-container { display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            left: 0; top: 0;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 16px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(245,158,11,0.35);
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-menu { flex: 1; padding: 0 10px; }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 12px;
+            border-radius: 10px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 2px;
+        }
+
+        .nav-item i { width: 18px; font-size: 15px; }
+
+        .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+        .nav-item.active {
+            background: rgba(245,158,11,0.15);
+            color: var(--primary);
+            border: 1px solid rgba(245,158,11,0.2);
+        }
+
+        .sidebar-controls {
+            padding: 12px 14px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            gap: 6px;
+        }
+
+        .sidebar-ctrl {
+            flex: 1;
+            padding: 7px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .sidebar-ctrl:hover { background: rgba(245,158,11,0.15); color: var(--primary); }
+        .sidebar-ctrl.active-color { color: var(--primary); border-color: rgba(245,158,11,0.3); }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: auto;
+        }
+
+        .user-avatar {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .user-name { display: block; color: #fff; font-size: 13px; font-weight: 600; }
+        .user-status { color: rgba(255,255,255,0.45); font-size: 11px; }
+
+        .logout-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .logout-btn:hover { color: #FF6B6B; }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            min-height: 100vh;
+            background: var(--bg-base);
+        }
+
+        .content-section { display: none; padding: 40px; }
+        .content-section.active { display: block; }
+
+        .section-header { margin-bottom: 32px; }
+        .section-header h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .section-header p { color: var(--text-secondary); font-size: 15px; }
+
+        /* Hero */
+        .hero-section {
+            background: linear-gradient(135deg, var(--secondary-dark), var(--secondary));
+            border-radius: 20px;
+            padding: 50px 40px;
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-color="green"] .hero-section {
+            background: linear-gradient(135deg, #022C22, #065F46);
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            right: -60px; top: -60px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-section h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .highlight { color: var(--primary); }
+
+        .hero-section p { color: rgba(255,255,255,0.7); font-size: 16px; margin-bottom: 30px; }
+
+        .hero-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.65);
+            font-size: 12px;
+        }
+
+        /* Glass card */
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .glass-card h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .glass-card h2 i { color: var(--primary); }
+
+        /* Quick Actions */
+        .quick-actions { margin-bottom: 30px; }
+        .quick-actions h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .action-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .action-icon {
+            width: 46px; height: 46px;
+            background: rgba(245,158,11,0.12);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+        .action-card h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .action-card p { color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+
+        /* Form elements in app */
+        .input-card { margin-bottom: 28px; }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 7px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.1);
+        }
+
+        .form-group select option { background: var(--bg-card); }
+
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(245,158,11,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(245,158,11,0.45);
+        }
+
+        /* Banner */
+        .emotional-support-banner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(56,189,248,0.06));
+            border: 1px solid rgba(245,158,11,0.2);
+            border-radius: 16px;
+            padding: 24px 28px;
+        }
+
+        .banner-icon {
+            width: 50px; height: 50px;
+            background: rgba(245,158,11,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .banner-content h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .banner-content p { color: var(--text-secondary); font-size: 13px; }
+
+        .banner-btn {
+            margin-left: auto;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .banner-btn:hover { background: var(--primary-dark); }
+
+        /* Chatbot */
+        .floating-chatbot {
+            position: fixed;
+            bottom: 28px; right: 28px;
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(245,158,11,0.45);
+            z-index: 1000;
+            transition: all 0.25s;
+        }
+
+        .floating-chatbot:hover { transform: scale(1.1); }
+
+        .chatbot-badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 8px;
+        }
+
+        .chatbot-panel {
+            position: fixed;
+            bottom: 96px; right: 28px;
+            width: 360px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-card);
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-panel.open { display: flex; }
+
+        .chatbot-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, var(--secondary-dark), var(--secondary));
+            color: #fff;
+        }
+
+        [data-color="green"] .chatbot-header { background: linear-gradient(135deg, #022C22, #065F46); }
+
+        .chatbot-title { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; }
+        .chatbot-title i { color: var(--primary); }
+
+        .chatbot-close { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 16px; }
+        .chatbot-close:hover { color: #fff; }
+
+        .chatbot-messages {
+            flex: 1;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chatbot-message { display: flex; gap: 10px; align-items: flex-start; }
+
+        .chatbot-message.bot .message-avatar {
+            width: 32px; height: 32px;
+            background: rgba(245,158,11,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .chatbot-message.user { flex-direction: row-reverse; }
+
+        .chatbot-message .message-content {
+            background: var(--bg-input);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: var(--text-primary);
+            max-width: 240px;
+        }
+
+        .chatbot-message.user .message-content {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+        }
+
+        .chatbot-input {
+            display: flex;
+            gap: 8px;
+            padding: 12px 14px;
+            border-top: 1px solid var(--border);
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 9px 13px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            padding: 9px 14px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .chatbot-input button:hover { background: var(--primary-dark); }
+
+        .chatbot-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 0 14px 12px;
+        }
+
+        .chatbot-suggestions button {
+            padding: 5px 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chatbot-suggestions button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Mentor section */
+        .mentor-intro {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .mentor-avatar {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .mentor-info h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .mentor-info p { color: var(--text-secondary); font-size: 14px; }
+
+        .emotion-selector { margin-bottom: 24px; }
+        .emotion-selector h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+        }
+
+        .emotion-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+
+        .emotion-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            border-radius: 30px;
+            color: var(--text-secondary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .emotion-btn:hover, .emotion-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(245,158,11,0.08);
+        }
+
+        .chat-container { overflow: hidden; }
+
+        .chat-messages {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message { display: flex; gap: 12px; align-items: flex-start; }
+        .message.user-message { flex-direction: row-reverse; }
+
+        .message-icon {
+            width: 36px; height: 36px;
+            background: rgba(245,158,11,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: var(--bg-input);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text-primary);
+            max-width: 75%;
+            line-height: 1.6;
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            padding: 14px 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 11px 14px;
+            background: var(--bg-input);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input input:focus { border-color: var(--primary); }
+
+        .btn-send {
+            padding: 11px 18px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-send:hover { background: var(--primary-dark); }
+
+        .mentor-tips { margin-top: 24px; }
+        .mentor-tips h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+
+        .tip-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .tip-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .tip-card i { font-size: 22px; color: var(--primary); margin-bottom: 10px; display: block; }
+        .tip-card h4 { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+        .tip-card p { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+        /* Results */
+        .results-container { display: grid; gap: 16px; }
+
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px 24px;
+            transition: all 0.2s;
+        }
+
+        .result-card:hover { border-color: var(--primary); box-shadow: var(--glow); }
+
+        .result-card h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .match-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(245,158,11,0.12);
+            color: var(--primary);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+        .skill-tag {
+            padding: 4px 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .skill-tag.missing {
+            border-color: rgba(239,68,68,0.4);
+            color: #EF4444;
+            background: rgba(239,68,68,0.08);
+        }
+
+        .skill-tag.present {
+            border-color: rgba(34,197,94,0.4);
+            color: #22C55E;
+            background: rgba(34,197,94,0.08);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .login-left { display: none; }
+            .login-right { width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-240px); }
+            .main-content { margin-left: 0; }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-section.active { animation: fadeInUp 0.35s ease; }
+
+        /* Signup form hidden by default */
+        #signupPanel { display: none; }
+
+        /* Error/success states */
+        .field-error {
+            font-size: 11px;
+            color: #EF4444;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .field-success {
+            font-size: 11px;
+            color: #22C55E;
+            margin-top: 5px;
+            display: none;
+        }
+
+        input.error { border-color: #EF4444 !important; }
+        input.success { border-color: #22C55E !important; }
+    </style>
+</head>
+<body>
+
+<!-- ===================== LOGIN PAGE ===================== -->
+<div id="loginPage">
+    <div class="login-page">
+
+        <!-- Left Branding Panel -->
+        <div class="login-left">
+            <div class="left-content">
+                <div class="brand-logo">
+                    <div class="brand-icon"><i class="fas fa-brain"></i></div>
+                    <div class="brand-name">Lakshya<span>Setu</span> AI</div>
+                </div>
+                <h2>Your AI-Powered Career Intelligence Platform</h2>
+                <p>Join thousands of students and professionals discovering their perfect career path with AI-driven insights.</p>
+
+                <div class="left-features">
+                    <div class="left-feature">
+                        <div class="left-feature-icon"><i class="fas fa-rocket"></i></div>
+                        <div class="left-feature-text">
+                            <strong>Smart Career Matching</strong>
+                            <span>AI matches you to roles based on your unique skill set</span>
+                        </div>
+                    </div>
+                    <div class="left-feature">
+                        <div class="left-feature-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="left-feature-text">
+                            <strong>Skill Gap Analysis</strong>
+                            <span>Know exactly what to learn and when</span>
+                        </div>
+                    </div>
+                    <div class="left-feature">
+                        <div class="left-feature-icon"><i class="fas fa-route"></i></div>
+                        <div class="left-feature-text">
+                            <strong>Personalized Roadmaps</strong>
+                            <span>Step-by-step learning plans for every career goal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="left-stats">
+                    <div class="left-stat">
+                        <div class="left-stat-num">50+</div>
+                        <div class="left-stat-label">Career Paths</div>
+                    </div>
+                    <div class="left-stat">
+                        <div class="left-stat-num">20+</div>
+                        <div class="left-stat-label">Exams Covered</div>
+                    </div>
+                    <div class="left-stat">
+                        <div class="left-stat-num">100+</div>
+                        <div class="left-stat-label">Courses</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Form Panel -->
+        <div class="login-right">
+            <!-- Theme / Color Controls -->
+            <div class="login-controls">
+                <button class="ctrl-btn" id="themeToggleLogin" onclick="toggleTheme()">
+                    <i class="fas fa-moon" id="themeIconLogin"></i>
+                    <span id="themeTextLogin">Light</span>
+                </button>
+                <button class="ctrl-btn active" id="colorNavy" onclick="setColor('navy')">⚓ Navy</button>
+                <button class="ctrl-btn" id="colorGreen" onclick="setColor('green')">🌿 Green</button>
+            </div>
+
+            <div class="login-form-box">
+                <div class="form-header">
+                    <h1 id="formTitle">Welcome back 👋</h1>
+                    <p id="formSubtitle">Login to your LakshyaSetu AI account</p>
+                </div>
+
+                <!-- Auth Tabs -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Login</button>
+                    <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+                </div>
+
+                <!-- Login Panel -->
+                <div id="loginPanel">
+                    <!-- Social Login -->
+                    <div class="social-buttons">
+                        <button class="social-btn" onclick="handleGmailLogin()">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                            Continue with Google
+                        </button>
+                        <button class="social-btn" onclick="handleLinkedInLogin()">
+                            <i class="fab fa-linkedin" style="color:#0A66C2;font-size:18px"></i>
+                            LinkedIn
+                        </button>
+                    </div>
+
+                    <div class="divider">or login with email</div>
+
+                    <form onsubmit="handleLogin(event)">
+                        <div class="field-group">
+                            <label>Email Address</label>
+                            <div class="field-wrap">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Password</label>
+                            <div class="field-wrap">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                                <button type="button" class="eye-toggle" onclick="togglePassword('loginPassword', this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rememberMe"> Remember me
+                            </label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-sign-in-alt"></i> Login to LakshyaSetu AI
+                        </button>
+                    </form>
+
+                    <div class="switch-text">
+                        Don't have an account? <a href="#" onclick="switchTab('signup')">Sign up free</a>
+                    </div>
+                </div>
+
+                <!-- Signup Panel -->
+                <div id="signupPanel">
+                    <div class="social-buttons">
+                        <button class="social-btn" onclick="handleGmailLogin()">
+                            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                            Sign up with Google
+                        </button>
+                        <button class="social-btn" onclick="handleLinkedInLogin()">
+                            <i class="fab fa-linkedin" style="color:#0A66C2;font-size:18px"></i>
+                            LinkedIn
+                        </button>
+                    </div>
+
+                    <div class="divider">or sign up with email</div>
+
+                    <form onsubmit="handleSignup(event)">
+                        <div class="field-row">
+                            <div class="field-group">
+                                <label>First Name</label>
+                                <div class="field-wrap">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="signupFirst" placeholder="Rahul" required>
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label>Last Name</label>
+                                <div class="field-wrap">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="signupLast" placeholder="Sharma" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Email Address</label>
+                            <div class="field-wrap">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Phone Number (optional)</label>
+                            <div class="field-wrap">
+                                <i class="fas fa-phone"></i>
+                                <input type="tel" id="signupPhone" placeholder="+91 98765 43210">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Password</label>
+                            <div class="field-wrap">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signupPassword" placeholder="Create a strong password" required oninput="checkStrength(this.value)">
+                                <button type="button" class="eye-toggle" onclick="togglePassword('signupPassword', this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="strength-bar">
+                                <div class="strength-segment" id="s1"></div>
+                                <div class="strength-segment" id="s2"></div>
+                                <div class="strength-segment" id="s3"></div>
+                                <div class="strength-segment" id="s4"></div>
+                            </div>
+                            <div class="strength-label" id="strengthLabel">Enter a password</div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Confirm Password</label>
+                            <div class="field-wrap">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="signupConfirm" placeholder="Repeat your password" required>
+                                <button type="button" class="eye-toggle" onclick="togglePassword('signupConfirm', this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-user-plus"></i> Create Free Account
+                        </button>
+                    </form>
+
+                    <p class="terms-text">
+                        By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </p>
+
+                    <div class="switch-text">
+                        Already have an account? <a href="#" onclick="switchTab('login')">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== MAIN APP ===================== -->
+<div class="app-container" id="mainApp" style="display:none">
+
+    <!-- Floating Chatbot -->
+    <div class="floating-chatbot" id="floatingChatbot" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+        <span class="chatbot-badge">AI</span>
+    </div>
+
+    <div class="chatbot-panel" id="chatbotPanel">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <i class="fas fa-robot"></i>
+                <span>LakshyaSetu AI Assistant</span>
+            </div>
+            <button class="chatbot-close" onclick="toggleChatbot()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="chatbot-message bot">
+                <div class="message-avatar"><i class="fas fa-robot"></i></div>
+                <div class="message-content"><p>Hello! I'm your AI career assistant. How can I help you today?</p></div>
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Ask me anything about careers..." onkeypress="handleChatbotKeyPress(event)">
+            <button onclick="sendChatbotMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="chatbot-suggestions">
+            <button onclick="quickAsk('career options')">🎯 Career Options</button>
+            <button onclick="quickAsk('skill gaps')">📊 Skill Gaps</button>
+            <button onclick="quickAsk('exam prep')">📚 Exam Prep</button>
+            <button onclick="quickAsk('interview tips')">💼 Interview Tips</button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a class="logo" href="#" onclick="navigateToSection('home'); return false;">
+            <div class="logo-icon"><i class="fas fa-brain"></i></div>
+            <span class="logo-text">LakshyaSetu AI</span>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active" data-section="home"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="#" class="nav-item" data-section="career-match"><i class="fas fa-briefcase"></i><span>Career Match</span></a>
+            <a href="#" class="nav-item" data-section="skill-gap"><i class="fas fa-chart-line"></i><span>Skill Gap</span></a>
+            <a href="#" class="nav-item" data-section="exams"><i class="fas fa-book-open"></i><span>Exam Pathways</span></a>
+            <a href="#" class="nav-item" data-section="roadmap"><i class="fas fa-route"></i><span>Learning Roadmap</span></a>
+            <a href="#" class="nav-item" data-section="interview"><i class="fas fa-user-tie"></i><span>Interview Prep</span></a>
+            <a href="#" class="nav-item" data-section="mentor"><i class="fas fa-heart"></i><span>Mentor Support</span></a>
+        </nav>
+
+        <!-- Sidebar controls: theme + color -->
+        <div class="sidebar-controls">
+            <button class="sidebar-ctrl" onclick="toggleTheme()" id="sidebarThemeBtn" title="Toggle Theme">
+                <i class="fas fa-moon" id="sidebarThemeIcon"></i>
+                <span id="sidebarThemeText">Light</span>
+            </button>
+            <button class="sidebar-ctrl active-color" id="sidebarNavy" onclick="setColor('navy')" title="Navy Theme">⚓</button>
+            <button class="sidebar-ctrl" id="sidebarGreen" onclick="setColor('green')" title="Green Theme">🌿</button>
+        </div>
+
+        <div class="user-profile">
+            <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <div>
+                <span class="user-name" id="userName">Guest User</span>
+                <span class="user-status" id="userStatus">Exploring</span>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Home -->
+        <section id="home" class="content-section active">
+            <div class="hero-section">
+                <h1>Welcome to <span class="highlight">LakshyaSetu AI</span></h1>
+                <p>Your AI-Powered Career Intelligence and Exam Guidance Platform</p>
+                <div class="hero-stats">
+                    <div class="stat-card"><span class="stat-number">50+</span><span class="stat-label">Career Paths</span></div>
+                    <div class="stat-card"><span class="stat-number">20+</span><span class="stat-label">Exams Covered</span></div>
+                    <div class="stat-card"><span class="stat-number">100+</span><span class="stat-label">Courses</span></div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h2>How Can We Help You Today?</h2>
+                <div class="action-grid">
+                    <div class="action-card" onclick="navigateToSection('career-match')">
+                        <div class="action-icon"><i class="fas fa-search"></i></div>
+                        <h3>Find My Career Path</h3>
+                        <p>Match your skills and interests to perfect career roles</p>
+                    </div>
+                    <div class="action-card" onclick="navigateToSection('skill-gap')">
+                        <div class="action-icon"><i class="fas fa-list-check"></i></div>
+                        <h3>Analyze Skill Gaps</h3>
+                        <p>Identify missing skills and get readiness score</p>
+                    </div>
+                    <div class="action-card" onclick="navigateToSection('exams')">
+                        <div class="action-icon"><i class="fas fa-clipboard-list"></i></div>
+                        <h3>Explore Exams</h3>
+                        <p>Find government & entrance exam pathways</p>
+                    </div>
+                    <div class="action-card" onclick="navigateToSection('interview')">
+                        <div class="action-icon"><i class="fas fa-comments"></i></div>
+                        <h3>Prepare for Interviews</h3>
+                        <p>Get practice questions and tips</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="emotional-support-banner">
+                <div class="banner-icon"><i class="fas fa-heart"></i></div>
+                <div class="banner-content">
+                    <h3>Feeling overwhelmed or uncertain about your career?</h3>
+                    <p>Our AI mentor is here to support you through any confusion or stress.</p>
+                </div>
+                <button class="banner-btn" onclick="navigateToSection('mentor')">Talk to Mentor</button>
+            </div>
+        </section>
+
+        <!-- Career Match -->
+        <section id="career-match" class="content-section">
+            <div class="section-header">
+                <h1>Career Role Matching Engine</h1>
+                <p>Find the perfect career path based on your skills and interests</p>
+            </div>
+            <div class="input-card glass-card">
+                <h2><i class="fas fa-sliders-h"></i> Your Profile</h2>
+                <div class="form-group">
+                    <label>Your Skills (comma separated)</label>
+                    <input type="text" id="userSkills" placeholder="e.g., Python, Programming, Data Analysis, Communication">
+                </div>
+                <div class="form-group">
+                    <label>Education Level</label>
+                    <select id="educationLevel">
+                        <option value="">Select Education</option>
+                        <option>Class 12</option><option>Diploma</option>
+                        <option>Bachelor's</option><option>Master's</option><option>PhD</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Preferred Sector</label>
+                    <select id="preferredSector">
+                        <option value="">Select Sector</option>
+                        <option>Technology</option><option>Marketing</option><option>Finance</option>
+                        <option>Engineering</option><option>Design</option><option>Business</option>
+                        <option>Healthcare</option><option>Government</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="matchCareers()"><i class="fas fa-search"></i> Find Matching Careers</button>
+            </div>
+            <div id="careerResults" class="results-container"></div>
+        </section>
+
+        <!-- Skill Gap -->
+        <section id="skill-gap" class="content-section">
+            <div class="section-header">
+                <h1>Skill Gap & Readiness Engine</h1>
+                <p>Analyze your readiness for your target role</p>
+            </div>
+            <div class="input-card glass-card">
+                <h2><i class="fas fa-bullseye"></i> Select Target Role</h2>
+                <div class="form-group">
+                    <label>Choose a role to analyze</label>
+                    <select id="targetRole">
+                        <option value="">Select a Role</option>
+                        <option>Software Developer</option><option>Data Scientist</option>
+                        <option>Business Analyst</option><option>Product Manager</option>
+                        <option>UX Designer</option><option>IAS Officer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Skills You Currently Have (comma separated)</label>
+                    <input type="text" id="currentSkills" placeholder="e.g., Python, Communication, Excel">
+                </div>
+                <button class="btn-primary" onclick="analyzeSkillGap()"><i class="fas fa-chart-pie"></i> Analyze Skill Gap</button>
+            </div>
+            <div id="skillGapResults" class="results-container"></div>
+        </section>
+
+        <!-- Exams -->
+        <section id="exams" class="content-section">
+            <div class="section-header">
+                <h1>Exam Guidance Engine</h1>
+                <p>Find the right exam for your career goals</p>
+            </div>
+            <div class="input-card glass-card">
+                <h2><i class="fas fa-filter"></i> Filter Exams</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Education Level</label>
+                        <select id="examEducation">
+                            <option value="">All Levels</option>
+                            <option>Class 12</option><option>Bachelor's</option><option>Master's</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Exam Type</label>
+                        <select id="examType">
+                            <option value="">All Types</option>
+                            <option>Engineering Entrance</option><option>Medical Entrance</option>
+                            <option>Government Services</option><option>Management Entrance</option>
+                            <option>Banking</option><option>Defense Services</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Career Path</label>
+                        <select id="examCareer">
+                            <option value="">All Careers</option>
+                            <option>Software Developer</option><option>Doctor</option>
+                            <option>IAS Officer</option><option>Business Analyst</option><option>Bank PO</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="filterExams()"><i class="fas fa-search"></i> Find Exams</button>
+            </div>
+            <div id="examResults" class="results-container"></div>
+        </section>
+
+        <!-- Roadmap -->
+        <section id="roadmap" class="content-section">
+            <div class="section-header">
+                <h1>Learning Roadmap Generator</h1>
+                <p>Get a structured 3-stage learning path for your target role</p>
+            </div>
+            <div class="input-card glass-card">
+                <h2><i class="fas fa-map"></i> Generate Your Roadmap</h2>
+                <div class="form-group">
+                    <label>Target Role</label>
+                    <select id="roadmapRole">
+                        <option value="">Select a Role</option>
+                        <option>Software Developer</option><option>Data Scientist</option>
+                        <option>Business Analyst</option><option>Product Manager</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Your Current Skill Level</label>
+                    <select id="currentLevel">
+                        <option value="beginner">Beginner (Just Starting)</option>
+                        <option value="intermediate">Intermediate (Some Knowledge)</option>
+                        <option value="advanced">Advanced (Strong Foundation)</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="generateRoadmap()"><i class="fas fa-route"></i> Generate Roadmap</button>
+            </div>
+            <div id="roadmapResults" class="results-container"></div>
+        </section>
+
+        <!-- Interview -->
+        <section id="interview" class="content-section">
+            <div class="section-header">
+                <h1>Interview Preparation</h1>
+                <p>Prepare for your next interview with practice questions</p>
+            </div>
+            <div class="input-card glass-card">
+                <h2><i class="fas fa-user-tie"></i> Select Role for Interview Prep</h2>
+                <div class="form-group">
+                    <label>Target Role</label>
+                    <select id="interviewRole">
+                        <option value="">Select a Role</option>
+                        <option>Software Developer</option><option>Data Scientist</option>
+                        <option>Business Analyst</option><option>Product Manager</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Experience Level</label>
+                    <select id="experienceLevel">
+                        <option value="fresher">Fresher (0-2 years)</option>
+                        <option value="mid">Mid-Level (2-5 years)</option>
+                        <option value="senior">Senior (5+ years)</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="prepareInterview()"><i class="fas fa-clipboard-check"></i> Get Interview Questions</button>
+            </div>
+            <div id="interviewResults" class="results-container"></div>
+        </section>
+
+        <!-- Mentor -->
+        <section id="mentor" class="content-section">
+            <div class="section-header">
+                <h1>Professional Mentor Support</h1>
+                <p>We're here to support you through any challenges</p>
+            </div>
+            <div class="mentor-intro glass-card">
+                <div class="mentor-avatar"><i class="fas fa-robot"></i></div>
+                <div class="mentor-info">
+                    <h2>AI Career Mentor</h2>
+                    <p>I'm here to help you navigate career challenges, build confidence, and stay motivated.</p>
+                </div>
+            </div>
+            <div class="emotion-selector">
+                <h3>How are you feeling today?</h3>
+                <div class="emotion-buttons">
+                    <button class="emotion-btn" data-emotion="confused" onclick="selectEmotion(this)"><i class="fas fa-question-circle"></i><span>Confused</span></button>
+                    <button class="emotion-btn" data-emotion="stressed" onclick="selectEmotion(this)"><i class="fas fa-tired"></i><span>Stressed</span></button>
+                    <button class="emotion-btn" data-emotion="demotivated" onclick="selectEmotion(this)"><i class="fas fa-arrow-down"></i><span>Demotivated</span></button>
+                    <button class="emotion-btn" data-emotion="overwhelmed" onclick="selectEmotion(this)"><i class="fas fa-brain"></i><span>Overwhelmed</span></button>
+                    <button class="emotion-btn" data-emotion="anxious" onclick="selectEmotion(this)"><i class="fas fa-exclamation-circle"></i><span>Anxious</span></button>
+                    <button class="emotion-btn" data-emotion="confident" onclick="selectEmotion(this)"><i class="fas fa-star"></i><span>Confident</span></button>
+                </div>
+            </div>
+            <div class="chat-container glass-card">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <div class="message-icon"><i class="fas fa-robot"></i></div>
+                        <div class="message-content">Hello! I'm your AI Career Mentor. I'm here to listen and help. How are you feeling today?</div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Share your thoughts or ask for advice...">
+                    <button class="btn-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+            <div class="mentor-tips">
+                <h3>Quick Action Steps</h3>
+                <div class="tips-grid">
+                    <div class="tip-card"><i class="fas fa-calendar-check"></i><h4>Create a Plan</h4><p>Break goals into manageable tasks</p></div>
+                    <div class="tip-card"><i class="fas fa-medal"></i><h4>Celebrate Wins</h4><p>Acknowledge every small achievement</p></div>
+                    <div class="tip-card"><i class="fas fa-users"></i><h4>Seek Support</h4><p>Connect with mentors and peers</p></div>
+                    <div class="tip-card"><i class="fas fa-balance-scale"></i><h4>Stay Balanced</h4><p>Take breaks and maintain wellness</p></div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+// ===================== THEME & COLOR =====================
+let currentTheme = 'dark';
+let currentColor = 'navy';
+
+function toggleTheme() {
+    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    const icon = currentTheme === 'dark' ? 'fa-moon' : 'fa-sun';
+    const text = currentTheme === 'dark' ? 'Light' : 'Dark';
+    ['themeIconLogin','sidebarThemeIcon'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.className = `fas ${icon}`; }
+    });
+    ['themeTextLogin','sidebarThemeText'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    });
+}
+
+function setColor(color) {
+    currentColor = color;
+    document.documentElement.setAttribute('data-color', color);
+    ['colorNavy','colorGreen','sidebarNavy','sidebarGreen'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove('active', 'active-color');
+    });
+    if (color === 'navy') {
+        document.getElementById('colorNavy')?.classList.add('active');
+        document.getElementById('sidebarNavy')?.classList.add('active-color');
+    } else {
+        document.getElementById('colorGreen')?.classList.add('active');
+        document.getElementById('sidebarGreen')?.classList.add('active-color');
+    }
+}
+
+// ===================== AUTH =====================
+function switchTab(tab) {
+    const loginPanel = document.getElementById('loginPanel');
+    const signupPanel = document.getElementById('signupPanel');
+    const tabLogin = document.getElementById('tabLogin');
+    const tabSignup = document.getElementById('tabSignup');
+    const title = document.getElementById('formTitle');
+    const sub = document.getElementById('formSubtitle');
+
+    if (tab === 'login') {
+        loginPanel.style.display = 'block';
+        signupPanel.style.display = 'none';
+        tabLogin.classList.add('active');
+        tabSignup.classList.remove('active');
+        title.textContent = 'Welcome back 👋';
+        sub.textContent = 'Login to your LakshyaSetu AI account';
+    } else {
+        loginPanel.style.display = 'none';
+        signupPanel.style.display = 'block';
+        tabLogin.classList.remove('active');
+        tabSignup.classList.add('active');
+        title.textContent = 'Create your account ✨';
+        sub.textContent = 'Join LakshyaSetu AI for free today';
+    }
+}
+
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+    } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+    }
+}
+
+function checkStrength(value) {
+    let score = 0;
+    if (value.length >= 8) score++;
+    if (/[A-Z]/.test(value)) score++;
+    if (/[0-9]/.test(value)) score++;
+    if (/[^A-Za-z0-9]/.test(value)) score++;
+
+    const colors = ['', '#EF4444', '#F59E0B', '#22C55E', '#16A34A'];
+    const labels = ['', 'Weak', 'Fair', 'Strong', 'Very Strong'];
+
+    for (let i = 1; i <= 4; i++) {
+        const seg = document.getElementById('s' + i);
+        seg.style.background = i <= score ? colors[score] : 'var(--border)';
+    }
+
+    document.getElementById('strengthLabel').textContent = value ? labels[score] || 'Weak' : 'Enter a password';
+    document.getElementById('strengthLabel').style.color = value ? colors[score] : 'var(--text-muted)';
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const pass = document.getElementById('loginPassword').value;
+    if (email && pass) {
+        const name = email.split('@')[0];
+        enterApp(name);
+    }
+}
+
+function handleSignup(e) {
+    e.preventDefault();
+    const first = document.getElementById('signupFirst').value;
+    const last = document.getElementById('signupLast').value;
+    const pass = document.getElementById('signupPassword').value;
+    const confirm = document.getElementById('signupConfirm').value;
+    if (pass !== confirm) { alert('Passwords do not match!'); return; }
+    enterApp(`${first} ${last}`);
+}
+
+function handleGmailLogin() { enterApp('Google User'); }
+function handleLinkedInLogin() { enterApp('LinkedIn User'); }
+
+function enterApp(name) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'flex';
+    document.getElementById('userName').textContent = name;
+    document.getElementById('userStatus').textContent = 'Career Explorer';
+}
+
+function handleLogout() {
+    document.getElementById('mainApp').style.display = 'none';
+    document.getElementById('loginPage').style.display = 'block';
+}
+
+// ===================== NAVIGATION =====================
+function navigateToSection(sectionId) {
+    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const section = document.getElementById(sectionId);
+    if (section) section.classList.add('active');
+    document.querySelectorAll(`.nav-item[data-section="${sectionId}"]`).forEach(n => n.classList.add('active'));
+}
+
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        navigateToSection(this.dataset.section);
+    });
+});
+
+// ===================== CHATBOT =====================
+function toggleChatbot() {
+    document.getElementById('chatbotPanel').classList.toggle('open');
+}
+
+function sendChatbotMessage() {
+    const input = document.getElementById('chatbotInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    addChatbotMessage(msg, 'user');
+    input.value = '';
+    setTimeout(() => {
+        addChatbotMessage(getBotReply(msg), 'bot');
+    }, 800);
+}
+
+function handleChatbotKeyPress(e) { if (e.key === 'Enter') sendChatbotMessage(); }
+
+function quickAsk(topic) {
+    document.getElementById('chatbotInput').value = `Tell me about ${topic}`;
+    sendChatbotMessage();
+}
+
+function addChatbotMessage(text, type) {
+    const container = document.getElementById('chatbotMessages');
+    const div = document.createElement('div');
+    div.className = `chatbot-message ${type}`;
+    if (type === 'bot') {
+        div.innerHTML = `<div class="message-avatar"><i class="fas fa-robot"></i></div><div class="message-content"><p>${text}</p></div>`;
+    } else {
+        div.innerHTML = `<div class="message-content"><p>${text}</p></div>`;
+    }
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+// ===================== MENTOR CHAT =====================
+function selectEmotion(btn) {
+    document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const emotion = btn.dataset.emotion;
+    const responses = {
+        confused: "It's completely okay to feel confused. Career paths aren't always clear. Let's break it down step by step — what area feels most uncertain for you?",
+        stressed: "I hear you. Stress is tough, especially when your future feels uncertain. Take a deep breath. Let's tackle one thing at a time — what's causing the most stress right now?",
+        demotivated: "Feeling demotivated happens to everyone. Remember: even the smallest step forward is progress. What goal were you working toward?",
+        overwhelmed: "When everything feels like too much, the best move is to pause and simplify. Let's identify just one thing you can do today.",
+        anxious: "Anxiety often comes from uncertainty about outcomes. Let's focus on what you *can* control. What's worrying you most right now?",
+        confident: "That's amazing! Confidence is your biggest asset. Let's channel that energy into a concrete action plan. What's your next big goal?"
+    };
+    addMentorMessage(responses[emotion] || "Tell me more about how you're feeling.", 'bot');
+}
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    addMentorMessage(msg, 'user');
+    input.value = '';
+    setTimeout(() => addMentorMessage(getBotReply(msg), 'bot'), 800);
+}
+
+document.getElementById('chatInput')?.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendMessage();
+});
+
+function addMentorMessage(text, type) {
+    const container = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `message ${type === 'bot' ? 'bot-message' : 'user-message'}`;
+    if (type === 'bot') {
+        div.innerHTML = `<div class="message-icon"><i class="fas fa-robot"></i></div><div class="message-content">${text}</div>`;
+    } else {
+        div.innerHTML = `<div class="message-content">${text}</div>`;
+    }
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function getBotReply(msg) {
+    const m = msg.toLowerCase();
+    if (m.includes('career') || m.includes('job')) return "Career exploration is exciting! I recommend starting with the Career Match tool to discover roles that align with your skills.";
+    if (m.includes('skill') || m.includes('learn')) return "Skill-building is a continuous journey. Use our Skill Gap Analyzer to identify exactly what to learn next!";
+    if (m.includes('exam') || m.includes('test')) return "We cover 20+ major exams. Navigate to Exam Pathways to find exams matching your education level and career goals.";
+    if (m.includes('interview')) return "Interview prep is key! Check our Interview Preparation section for role-specific questions and tips.";
+    if (m.includes('stress') || m.includes('anxiety')) return "It's normal to feel that way. Remember: progress > perfection. Take it one day at a time. I'm here for you!";
+    return "That's a great question! I'm here to help with career guidance, skill development, exam prep, and emotional support. What would you like to explore?";
+}
+
+// ===================== CAREER MATCH =====================
+function matchCareers() {
+    const skills = document.getElementById('userSkills').value.toLowerCase();
+    const sector = document.getElementById('preferredSector').value;
+
+    const roles = [
+        { title: 'Software Developer', sector: 'Technology', skills: ['python', 'javascript', 'programming', 'react', 'node'], desc: 'Build applications and systems' },
+        { title: 'Data Scientist', sector: 'Technology', skills: ['python', 'machine learning', 'data analysis', 'statistics', 'sql'], desc: 'Extract insights from complex data' },
+        { title: 'Business Analyst', sector: 'Business', skills: ['excel', 'communication', 'analysis', 'sql', 'business'], desc: 'Bridge business needs and technology' },
+        { title: 'UX Designer', sector: 'Design', skills: ['design', 'figma', 'ux', 'user research', 'creativity'], desc: 'Create intuitive user experiences' },
+        { title: 'Digital Marketer', sector: 'Marketing', skills: ['marketing', 'seo', 'content', 'social media', 'analytics'], desc: 'Drive growth through digital channels' },
+        { title: 'Financial Analyst', sector: 'Finance', skills: ['finance', 'excel', 'accounting', 'analysis', 'investment'], desc: 'Analyze financial data and trends' },
+    ];
+
+    const userSkillArr = skills.split(',').map(s => s.trim());
+    const filtered = roles.filter(r => !sector || r.sector === sector).map(r => {
+        const matched = r.skills.filter(s => userSkillArr.some(us => us.includes(s) || s.includes(us)));
+        const score = Math.round((matched.length / r.skills.length) * 100);
+        return { ...r, score, matched };
+    }).sort((a, b) => b.score - a.score);
+
+    const container = document.getElementById('careerResults');
+    container.innerHTML = filtered.map(r => `
+        <div class="result-card">
+            <h3>${r.title}</h3>
+            <div class="match-score"><i class="fas fa-bullseye"></i> ${r.score}% Match</div>
+            <p style="color:var(--text-secondary);font-size:14px;margin-top:8px">${r.desc}</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:${r.score}%"></div></div>
+            <div class="skill-tags">
+                ${r.skills.map(s => `<span class="skill-tag ${r.matched.includes(s) ? 'present' : 'missing'}">${s}</span>`).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===================== SKILL GAP =====================
+function analyzeSkillGap() {
+    const role = document.getElementById('targetRole').value;
+    const skills = document.getElementById('currentSkills').value.toLowerCase().split(',').map(s => s.trim());
+
+    if (!role) { alert('Please select a role'); return; }
+
+    const roleSkills = {
+        'Software Developer': ['python', 'javascript', 'git', 'data structures', 'algorithms', 'react', 'node.js'],
+        'Data Scientist': ['python', 'machine learning', 'sql', 'statistics', 'tensorflow', 'pandas', 'visualization'],
+        'Business Analyst': ['excel', 'sql', 'communication', 'powerpoint', 'business acumen', 'data analysis'],
+        'Product Manager': ['communication', 'roadmapping', 'agile', 'user research', 'analytics', 'leadership'],
+        'UX Designer': ['figma', 'ux research', 'prototyping', 'wireframing', 'design thinking'],
+        'IAS Officer': ['general knowledge', 'essay writing', 'reasoning', 'ethics', 'public administration'],
+    };
+
+    const required = roleSkills[role] || ['skill1', 'skill2', 'skill3'];
+    const present = required.filter(s => skills.some(us => us.includes(s) || s.includes(us)));
+    const missing = required.filter(s => !present.includes(s));
+    const score = Math.round((present.length / required.length) * 100);
+
+    document.getElementById('skillGapResults').innerHTML = `
+        <div class="result-card">
+            <h3>Readiness Analysis: ${role}</h3>
+            <div class="match-score"><i class="fas fa-chart-pie"></i> ${score}% Ready</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${score}%"></div></div>
+            <h4 style="margin-top:16px;margin-bottom:8px;color:var(--text-secondary);font-size:13px">SKILLS YOU HAVE</h4>
+            <div class="skill-tags">${present.map(s => `<span class="skill-tag present"><i class="fas fa-check" style="font-size:10px"></i> ${s}</span>`).join('') || '<span class="skill-tag missing">None matched</span>'}</div>
+            <h4 style="margin-top:16px;margin-bottom:8px;color:var(--text-secondary);font-size:13px">SKILLS TO DEVELOP</h4>
+            <div class="skill-tags">${missing.map(s => `<span class="skill-tag missing"><i class="fas fa-plus" style="font-size:10px"></i> ${s}</span>`).join('') || '<span class="skill-tag present">You have all required skills!</span>'}</div>
+        </div>
+    `;
+}
+
+// ===================== EXAMS =====================
+function filterExams() {
+    const type = document.getElementById('examType').value;
+    const exams = [
+        { name: 'JEE Main & Advanced', type: 'Engineering Entrance', edu: "Class 12", career: 'Software Developer', desc: 'Premier engineering entrance for IITs, NITs' },
+        { name: 'NEET', type: 'Medical Entrance', edu: "Class 12", career: 'Doctor', desc: 'National medical entrance examination' },
+        { name: 'UPSC Civil Services', type: 'Government Services', edu: "Bachelor's", career: 'IAS Officer', desc: 'Prestigious civil services examination' },
+        { name: 'CAT', type: 'Management Entrance', edu: "Bachelor's", career: 'Business Analyst', desc: 'IIM admission test for MBA' },
+        { name: 'IBPS PO', type: 'Banking', edu: "Bachelor's", career: 'Bank PO', desc: 'Banking recruitment examination' },
+        { name: 'GATE', type: 'Engineering Entrance', edu: "Bachelor's", career: 'Software Developer', desc: 'Graduate engineering entrance for M.Tech/PSU jobs' },
+        { name: 'NDA', type: 'Defense Services', edu: "Class 12", career: 'Defense Officer', desc: 'National Defence Academy examination' },
+    ];
+
+    const filtered = exams.filter(e => !type || e.type === type);
+    document.getElementById('examResults').innerHTML = filtered.map(e => `
+        <div class="result-card">
+            <h3>${e.name}</h3>
+            <div class="match-score"><i class="fas fa-tag"></i> ${e.type}</div>
+            <p style="color:var(--text-secondary);font-size:14px;margin-top:8px">${e.desc}</p>
+            <div class="skill-tags">
+                <span class="skill-tag present"><i class="fas fa-graduation-cap" style="font-size:10px"></i> ${e.edu}</span>
+                <span class="skill-tag"><i class="fas fa-briefcase" style="font-size:10px"></i> ${e.career}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===================== ROADMAP =====================
+function generateRoadmap() {
+    const role = document.getElementById('roadmapRole').value;
+    const level = document.getElementById('currentLevel').value;
+    if (!role) { alert('Please select a role'); return; }
+
+    const stages = [
+        { stage: 'Stage 1: Foundation', icon: 'fa-seedling', items: ['Learn core concepts', 'Complete beginner tutorials', 'Build 2-3 small projects', 'Join online communities'] },
+        { stage: 'Stage 2: Skill Building', icon: 'fa-tools', items: ['Take structured courses', 'Work on real projects', 'Contribute to open source', 'Build your portfolio'] },
+        { stage: 'Stage 3: Job Ready', icon: 'fa-rocket', items: ['Apply for internships', 'Practice interview questions', 'Network with professionals', 'Land your first role'] },
+    ];
+
+    document.getElementById('roadmapResults').innerHTML = `
+        <div class="result-card">
+            <h3>Roadmap: ${role} (${level.charAt(0).toUpperCase() + level.slice(1)})</h3>
+        </div>
+        ${stages.map(s => `
+            <div class="result-card">
+                <h3><i class="fas ${s.icon}" style="color:var(--primary);margin-right:8px"></i>${s.stage}</h3>
+                <ul style="margin-top:12px;padding-left:20px;color:var(--text-secondary);font-size:14px;line-height:2">
+                    ${s.items.map(i => `<li>${i}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('')}
+    `;
+}
+
+// ===================== INTERVIEW PREP =====================
+function prepareInterview() {
+    const role = document.getElementById('interviewRole').value;
+    const level = document.getElementById('experienceLevel').value;
+    if (!role) { alert('Please select a role'); return; }
+
+    const questions = {
+        technical: ['What is your approach to debugging complex issues?', 'Explain a challenging project you built and what you learned.', 'How do you stay updated with new technologies?'],
+        behavioral: ['Tell me about yourself and your career journey.', 'Describe a time you handled a difficult situation at work.', 'Where do you see yourself in 5 years?'],
+        situational: ['How would you prioritize multiple deadlines?', 'What would you do if you disagreed with your manager?', 'How do you handle failure or setbacks?']
+    };
+
+    document.getElementById('interviewResults').innerHTML = `
+        ${Object.entries(questions).map(([type, qs]) => `
+            <div class="result-card">
+                <h3><i class="fas fa-question-circle" style="color:var(--primary);margin-right:8px"></i>${type.charAt(0).toUpperCase() + type.slice(1)} Questions</h3>
+                <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">
+                    ${qs.map((q, i) => `
+                        <div style="background:var(--bg-input);border-radius:10px;padding:14px 16px;border-left:3px solid var(--primary)">
+                            <span style="color:var(--primary);font-size:12px;font-weight:600">Q${i+1}</span>
+                            <p style="color:var(--text-primary);font-size:14px;margin-top:4px">${q}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('')}
+    `;
+}
+</script>
+</body>
+</html>
